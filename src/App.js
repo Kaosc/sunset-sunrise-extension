@@ -23,7 +23,6 @@ export default function App() {
   return (
     <div
       className="App"
-      style={{ backgroundColor: "black", color: "white", height: "100%" }}
     >
       <h1>{city.name}</h1>
       <h2>Sunrise: {response.sunrise}</h2>
