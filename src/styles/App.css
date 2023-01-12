@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: black;
+  color: white;
+  height: 300px;
+  width: 400px;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: left;
+}
