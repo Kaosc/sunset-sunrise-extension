@@ -1,11 +1,12 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  min-width: 300px;
-  max-width: 500px;
+  min-width : 300px;
+  min-height: 250px;
 }
 
 .App {
   font-family: sans-serif;
-  text-align: left;
+  text-align: center;
+  padding: 20px;
 }

@@ -1,65 +1,97 @@
-import { useCallback, useEffect, useState, useRef } from "react"
 import "./styles/App.css"
+import { useCallback, useEffect, useState, useRef } from "react"
+import { GetTimeNow, CalculatePassedDay } from "./utils"
+
+const fetchTimes = (lat, lng) =>
+	fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`)
+		.then((response) => response.json())
+		.then((data) => data.results)
+
+const setLocalCity = (city) => localStorage.setItem("city", JSON.stringify(city))
+const getLocalCity = () => JSON.parse(localStorage.getItem("city"))
 
 export default function App() {
-	const [city, setCity] = useState({})
-	const [times, setTimes] = useState({})
+	const [city, setCity] = useState(null)
 	const [cities, setCities] = useState([])
 	const inputRef = useRef(null)
 
 	useEffect(() => {
-		if (cities.length > 0) return
-		fetch("https://raw.githubusercontent.com/Kaosc/cities-geo-location-api/master/cities.json")
-			.then((response) => response.json())
-			.then((data) => setCities(data))
+		if (cities.length === 0) {
+			fetch("https://raw.githubusercontent.com/Kaosc/cities-geo-location-api/master/cities.json")
+				.then((response) => response.json())
+				.then((data) => setCities(data))
+		}
+
+		const localCity = getLocalCity()
+		if (localCity) {
+			if (CalculatePassedDay(localCity.fetchDate) > 0) {
+				fetchTimes(localCity.city.lat, localCity.city.lng).then((data) => {
+					const city = {
+						city: localCity.city,
+						times: data.results,
+						fetchDate: GetTimeNow(),
+					}
+
+					setCity(city)
+					setLocalCity(city)
+				})
+			} else {
+				setCity(localCity)
+			}
+		}
 	}, [])
 
-	const searchHandler = (e) => {
+	const searchHandler = async (e) => {
 		if (e.key === "Enter" && e.target.value !== "") {
 			const filteredCity = cities.find((city) => {
 				return city.name.toLowerCase().includes(e.target.value.toLowerCase())
 			})
 
 			if (filteredCity) {
-				fetch(
-					`https://api.sunrise-sunset.org/json?lat=${filteredCity.lat}&lng=${filteredCity.lng}&date=today`
-				)
-					.then((response) => response.json())
-					.then((data) => {
-						setCity(filteredCity)
-						setTimes(data.results)
-						inputRef.current.value = ""
-					})
+				await fetchTimes(filteredCity.lat, filteredCity.lng).then((times) => {
+					console.log(times)
+					const city = {
+						city: filteredCity,
+						times: times,
+						fetchDate: GetTimeNow(),
+					}
+
+					setCity(city)
+					setLocalCity(city)
+					inputRef.current.value = ""
+				})
 			}
 		}
 	}
 
 	const RenderCity = useCallback(() => {
-		if (!city.name) return <h1 style={{ paddingLeft: "30px", color: "#b8b8b83d" }}>Zzz</h1>
+		if (!city) return <h1 style={{ color: "#b8b8b83d" }}>Zzz</h1>
+
+		const sunrise = new Date(city.times.sunrise)
+		const sunset = new Date(city.times.sunset)
+
 		return (
-			<div style={{ paddingLeft: "20px" }}>
-				<h3 style={{ marginBottom: "15px" }}>{city.name}</h3>
-				<h4 style={{ marginBottom: "0" }}>Sunrise: {times.sunrise}</h4>
-				<h4>Sunset: {times.sunset}</h4>
+			<div>
+				<h3 style={{ marginBottom: "15px" }}>{city.city.name}</h3>
+				<h4 style={{ marginBottom: "0" }}>Sunrise: {sunrise.toLocaleTimeString()}</h4>
+				<h4>Sunset: {sunset.toLocaleTimeString()}</h4>
 			</div>
 		)
 	}, [city])
 
 	return (
 		<div className='App'>
-			<main className='container'>
-				<input
-					ref={inputRef}
-					autoFocust={true}
-					style={{ margin: "20px", width: "300px", height: "50px" }}
-					type='search'
-					id='search'
-					name='search'
-					placeholder='Search City'
-					onKeyDown={searchHandler}
-				/>
-				<RenderCity />
-			</main>
+			<input
+				ref={inputRef}
+				autoFocust={true}
+				type='search'
+				id='search'
+				name='search'
+				placeholder='Search City'
+				onKeyDown={searchHandler}
+			/>
+			<RenderCity />
+			<a href='https://sunrise-sunset.org/'>Times by Sunset Sunrise</a>
 		</div>
 	)
 }
