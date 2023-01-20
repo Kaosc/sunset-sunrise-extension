@@ -2,12 +2,12 @@ import "./styles/App.css"
 import { useCallback, useEffect, useState, useRef } from "react"
 import { GetTimeNow, CalculatePassedDay } from "./utils"
 
-const fetchTimes = (lat, lng) =>
+const fetchTimes = async (lat, lng) =>
 	fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`)
 		.then((response) => response.json())
 		.then((data) => data.results)
 
-const setLocalCity = (city) => localStorage.setItem("city", JSON.stringify(city))
+const saveLocalCity = (city) => localStorage.setItem("city", JSON.stringify(city))
 const getLocalCity = () => JSON.parse(localStorage.getItem("city"))
 
 export default function App() {
@@ -23,17 +23,18 @@ export default function App() {
 		}
 
 		const localCity = getLocalCity()
+
 		if (localCity) {
 			if (CalculatePassedDay(localCity.fetchDate) > 0) {
-				fetchTimes(localCity.city.lat, localCity.city.lng).then((data) => {
+				fetchTimes(localCity.city.lat, localCity.city.lng).then((times) => {
 					const city = {
 						city: localCity.city,
-						times: data.results,
+						times: times,
 						fetchDate: GetTimeNow(),
 					}
 
+					saveLocalCity(city)
 					setCity(city)
-					setLocalCity(city)
 				})
 			} else {
 				setCity(localCity)
@@ -48,8 +49,7 @@ export default function App() {
 			})
 
 			if (filteredCity) {
-				await fetchTimes(filteredCity.lat, filteredCity.lng).then((times) => {
-					console.log(times)
+				fetchTimes(filteredCity.lat, filteredCity.lng).then((times) => {
 					const city = {
 						city: filteredCity,
 						times: times,
@@ -57,7 +57,7 @@ export default function App() {
 					}
 
 					setCity(city)
-					setLocalCity(city)
+					saveLocalCity(city)
 					inputRef.current.value = ""
 				})
 			}
@@ -83,7 +83,7 @@ export default function App() {
 		<div className='App'>
 			<input
 				ref={inputRef}
-				autoFocust={true}
+				autoFocus={true}
 				type='search'
 				id='search'
 				name='search'
