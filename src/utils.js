@@ -17,3 +17,6 @@ export function CalculatePassedDay(deletedTime) {
 
 	return diffInDays
 }
+
+export const saveCity = (city) => localStorage.setItem("city", JSON.stringify(city))
+export const getLocalCity = () => JSON.parse(localStorage.getItem("city"))

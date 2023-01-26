@@ -1,55 +1,58 @@
 import "./styles/App.css"
 import { useCallback, useEffect, useState, useRef } from "react"
-import { GetTimeNow, CalculatePassedDay } from "./utils"
+import { GetTimeNow, CalculatePassedDay, getLocalCity, saveCity } from "./utils"
+import { FetchCities, FetchTimes } from "./api"
 
-const fetchTimes = async (lat, lng) =>
-	fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`)
-		.then((response) => response.json())
-		.then((data) => data.results)
-
-const saveLocalCity = (city) => localStorage.setItem("city", JSON.stringify(city))
-const getLocalCity = () => JSON.parse(localStorage.getItem("city"))
+const timeOptions = { hour12: false, hour: "2-digit", minute: "2-digit" }
 
 export default function App() {
 	const [city, setCity] = useState(null)
 	const [cities, setCities] = useState([])
 	const inputRef = useRef(null)
 
+	// Fetch cities only once at start
 	useEffect(() => {
-		if (cities.length === 0) {
-			fetch("https://raw.githubusercontent.com/Kaosc/cities-geo-location-api/master/cities.json")
-				.then((response) => response.json())
-				.then((data) => setCities(data))
-		}
+		if (cities.length > 0) return
+
+		FetchCities().then((cities) => {
+			setCities(cities)
+		}).catch((e) => console.log(e))
+	}, [])
+
+	// Fetch city only once at start
+	useEffect(() => {
+		if (city) return
 
 		const localCity = getLocalCity()
 
 		if (localCity) {
 			if (CalculatePassedDay(localCity.fetchDate) > 0) {
-				fetchTimes(localCity.city.lat, localCity.city.lng).then((times) => {
+				FetchTimes(localCity.city.lat, localCity.city.lng).then((times) => {
 					const city = {
 						city: localCity.city,
 						times: times,
 						fetchDate: GetTimeNow(),
 					}
 
-					saveLocalCity(city)
+					saveCity(city)
 					setCity(city)
-				})
+				}).catch((e) => console.log(e))
 			} else {
 				setCity(localCity)
 			}
 		}
 	}, [])
 
-	const searchHandler = async (e) => {
+	const searchHandler = useCallback(async (e) => {
 		if (e.key === "Enter" && e.target.value !== "") {
+
 			const filteredCity = cities.find((city) => {
 				return city.name.toLowerCase().includes(e.target.value.toLowerCase())
 			})
 
 			if (filteredCity) {
-				fetchTimes(filteredCity.lat, filteredCity.lng).then((times) => {
+				FetchTimes(filteredCity.lat, filteredCity.lng).then((times) => {
+
 					const city = {
 						city: filteredCity,
 						times: times,
@@ -57,12 +60,12 @@ export default function App() {
 					}
 
 					setCity(city)
-					saveLocalCity(city)
+					saveCity(city)
 					inputRef.current.value = ""
-				})
+				}).catch((e) => console.log(e))
 			}
 		}
-	}
+	}, [])
 
 	const RenderCity = useCallback(() => {
 		if (!city) return <h1 style={{ color: "#b8b8b83d" }}>Zzz</h1>
@@ -73,8 +76,8 @@ export default function App() {
 		return (
 			<div>
 				<h3 style={{ marginBottom: "15px" }}>{city.city.name}</h3>
-				<h4 style={{ marginBottom: "0" }}>Sunrise: {sunrise.toLocaleTimeString()}</h4>
-				<h4>Sunset: {sunset.toLocaleTimeString()}</h4>
+				<h4 style={{ marginBottom: "0" }}>Sunrise: {sunrise.toLocaleTimeString([], timeOptions)}</h4>
+				<h4>Sunset: {sunset.toLocaleTimeString([], timeOptions)}</h4>
 			</div>
 		)
 	}, [city])
@@ -83,11 +86,11 @@ export default function App() {
 		<div className='App'>
 			<input
 				ref={inputRef}
-				autoFocus={true}
+				autoFocus={city}
 				type='search'
 				id='search'
 				name='search'
-				placeholder='Search City'
+				placeholder='Search city'
 				onKeyDown={searchHandler}
 			/>
 			<RenderCity />
