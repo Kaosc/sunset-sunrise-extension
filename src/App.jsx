@@ -7,15 +7,14 @@ const timeOptions = { hour12: false, hour: "2-digit", minute: "2-digit" }
 
 export default function App() {
 	const [city, setCity] = useState(null)
-	const [cities, setCities] = useState([])
+	const cities = useRef([])
 	const inputRef = useRef(null)
 
 	// Fetch cities only once at start
 	useEffect(() => {
-		if (cities.length > 0) return
-
-		FetchCities().then((cities) => {
-			setCities(cities)
+		if (cities.current.length > 0) return
+		FetchCities().then((data) => {
+			cities.current = data
 		}).catch((e) => console.log(e))
 	}, [])
 
@@ -43,10 +42,10 @@ export default function App() {
 		}
 	}, [])
 
-	const searchHandler = useCallback(async (e) => {
+	const searchHandler = (e) => {
 		if (e.key === "Enter" && e.target.value !== "") {
 
-			const filteredCity = cities.find((city) => {
+			const filteredCity = cities.current.find((city) => {
 				return city.name.toLowerCase().includes(e.target.value.toLowerCase())
 			})
 
@@ -65,7 +64,7 @@ export default function App() {
 				}).catch((e) => console.log(e))
 			}
 		}
-	}, [])
+	}
 
 	const RenderCity = useCallback(() => {
 		if (!city) return <h1 style={{ color: "#b8b8b83d" }}>Zzz</h1>
