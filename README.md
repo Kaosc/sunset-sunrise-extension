@@ -6,6 +6,8 @@
 <p align="center" width="100%">
   <img src="./src/assets/preview.png" alt="word counter pro logo" />
 </p>
-<center>
-<a href="https://sunrise-sunset.org/"> Powered By sunrise-sunset.org </a>
-</center>
+
+<div align="center">
+  <a href="https://sunrise-sunset.org/"> Powered By sunrise-sunset.org </a>
+</div>
+
