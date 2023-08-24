@@ -2,7 +2,13 @@
   "name": "sunset-sunrise",
   "version": "1.0.0",
   "private": true,
-  "description": "React example starter project",
+  "description": "Sunset and sunrise times for your location",
+  "author": {
+    "name": "Kaosc",
+    "email": "kaoscdev@gmail.com",
+    "url": "https://kaosc.vercel.app/"
+  },
+  "homepage": "https://github.com/kaosc/sunset-sunrise-extension",
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
