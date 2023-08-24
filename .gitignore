@@ -11,7 +11,7 @@ private.pem
 /coverage
 
 # production
-/build
+/build/static
 
 # misc
 .DS_Store
