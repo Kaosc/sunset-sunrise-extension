@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 
 import { CalculatePassedDay, getLocalCity, saveCity } from "./utils/utils"
-import { LOGO_URL } from "./utils/constants"
-import FetchCities from "./api/FetchCities"
-import FetchTimes from "./api/FetchTimes"
+
 import City from "./components/City"
 import Search from "./components/Search"
+import Header from "./components/Header"
+
+import FetchCities from "./api/FetchCities"
+import FetchTimes from "./api/FetchTimes"
+import Attribution from "./components/Attribution"
 
 export default function App() {
 	const [city, setCity] = useState<City | null>(null)
@@ -16,7 +19,7 @@ export default function App() {
 	useEffect(() => {
 		FetchCities()
 			.then((data) => (cities.current = data))
-			.catch((e) => console.log(e))
+			.catch((e) => console.debug(e))
 	}, [])
 
 	// Fetch local storage city
@@ -37,7 +40,7 @@ export default function App() {
 						saveCity(city)
 						setCity(city)
 					})
-					.catch((e) => console.log(e))
+					.catch((e) => console.debug(e))
 			} else {
 				setCity(localStorageCity)
 			}
@@ -76,42 +79,22 @@ export default function App() {
 							inputRef.current.value = ""
 						}
 					})
-					.catch((e) => console.warn(e))
+					.catch((e) => console.debug(e))
 			}
 		}
 	}, [])
 
 	return (
-		<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
-			<div className="flex flex-row items-center justify-center my-5">
-				<img
-					src={LOGO_URL}
-					alt="logo"
-					width={23}
-					height={23}
-					className="mr-2"
+		<main className="min-h-screen bg-gradient-to-r from-zinc-950 to-zinc-900">
+			<div className="flex flex-col min-w-[300px] min-h-[250px] items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
+				<Header />
+				<Search
+					inputRef={inputRef}
+					searchHandler={searchHandler}
 				/>
-				<h4 className="text-base font-bold bg-gradient-to-r from-zinc-400 to-zinc-500 text-transparent bg-clip-text">
-					Sunset Sunrise
-				</h4>
+				<City city={city} />
+				<Attribution />
 			</div>
-
-			<Search
-				inputRef={inputRef}
-				searchHandler={searchHandler}
-			/>
-
-			<City city={city} />
-
-			<a
-				className="text-sm text-gray-400 mb-3"
-				href="https://sunrise-sunset.org/"
-			>
-				Times by Sunset Sunrise
-			</a>
-		</div>
+		</main>
 	)
 }
-
-// #0d0e14
-// #252136
