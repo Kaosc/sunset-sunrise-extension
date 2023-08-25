@@ -1,7 +1,7 @@
 import { timeOptions } from "../utils/constants"
 import { FiSunrise, FiSunset } from "react-icons/fi"
 
-export default function City({ city }: { city: City | null }) {
+export default function City({ city }: { city: City | undefined }) {
 	return (
 		<div className="items-center justify-center flex flex-col text-center mb-5">
 			{!city ? (
