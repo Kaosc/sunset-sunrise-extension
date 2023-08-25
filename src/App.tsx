@@ -76,7 +76,7 @@ export default function App() {
 	// prettier-ignore
 	return (
 		<main className="min-h-screen bg-gradient-to-r from-zinc-950 to-zinc-900">
-			<div className="flex flex-col min-w-[300px] min-h-[250px] items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
+			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
 				<Search inputRef={inputRef} searchHandler={searchHandler} />
 				<City city={city} />
