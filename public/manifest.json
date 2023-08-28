@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Sunset Sunrise",
   "description": "Sunset and Sunrise time for your location",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "action": {
     "default_popup": "index.html",
     "default_title": "Sunset Sunrise"

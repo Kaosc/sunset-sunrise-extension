@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 
-import { CalculatePassedDay, getLocalCity, saveCity } from "./utils/utils"
+import { CalculatePassedDay, getLocalCity, getLocalTimeZoneMode, saveCity } from "./utils/utils"
 
 import City from "./components/City"
 import Search from "./components/Search"
@@ -8,10 +8,11 @@ import Header from "./components/Header"
 
 import FetchCities from "./api/FetchCities"
 import FetchTimes from "./api/FetchTimes"
-import Attribution from "./components/Attribution"
+import Footer from "./components/Footer"
 
 export default function App() {
 	const [city, setCity] = useState<City | undefined>(getLocalCity())
+	const [timeZoneMode, setTimeZoneMode] = useState(getLocalTimeZoneMode())
 	const cities = useRef<FilteredCity[]>([])
 	const inputRef = useRef<HTMLInputElement>(null)
 
@@ -41,8 +42,12 @@ export default function App() {
 		}
 	}, [])
 
+	useEffect(() => {
+		localStorage.setItem("timeZoneMode", timeZoneMode)
+	}, [timeZoneMode])
+
 	const searchHandler = useCallback(async (e: any, clearInput: Function) => {
-		const search = inputRef.current?.value?.toLocaleLowerCase()
+		const search = inputRef.current?.value?.toLowerCase().trim()
 		const action = e.type === "click" || e.key === "Enter"
 
 		if (action && search?.trim()) {
@@ -79,8 +84,8 @@ export default function App() {
 			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
 				<Search inputRef={inputRef} searchHandler={searchHandler} />
-				<City city={city} />
-				<Attribution />
+				<City city={city} timeZoneMode={timeZoneMode} />
+				<Footer setTimeZoneMode={setTimeZoneMode} timeZoneMode={timeZoneMode} />
 			</div>
 		</main>
 	)
