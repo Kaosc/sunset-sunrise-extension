@@ -13,10 +13,6 @@ export default function Search({
 }) {
 	const [visible, setVisible] = React.useState(false)
 
-	const handler = (e: any) => {
-		searchHandler(e, clearInput)
-	}
-
 	const onTextChange = () => {
 		if (inputRef.current?.value) setVisible(true)
 		else setVisible(false)
@@ -28,6 +24,10 @@ export default function Search({
 			inputRef.current.value = ""
 			setVisible(false)
 		}
+	}
+
+	const handler = (e: any) => {
+		searchHandler(e, clearInput)
 	}
 
 	return (

@@ -4,7 +4,15 @@ import { FiSunrise, FiSunset } from "react-icons/fi"
 import moment from "moment-timezone"
 import cityTimezones from "city-timezones"
 
-export default function City({ city, timeZoneMode }: { city: City | undefined; timeZoneMode: string }) {
+export default function City({
+	city,
+	cityName,
+	timeZoneMode,
+}: {
+	city: City | undefined
+	cityName: string
+	timeZoneMode: string
+}) {
 	const times = useMemo(() => {
 		// Get sunrise and sunset times from the API response
 		const sunriseUtc = moment.utc(city?.times.sunrise)
@@ -14,18 +22,18 @@ export default function City({ city, timeZoneMode }: { city: City | undefined; t
 		let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 		// If the time zone mode is 'actual', try to find the time zone by city name
-		if (timeZoneMode === "actual" && city?.city?.name) {
+		if (timeZoneMode === "actual" && city?.city?.city) {
 			let tz = []
 
 			// Try to find the time zone by city name
-			tz = cityTimezones.lookupViaCity(city?.city?.name)
+			tz = cityTimezones.lookupViaCity(city?.city?.city)
 
 			/* 
 				If the city name is not found, try to find the time zone by state 
 				and get the first relevant result
 			*/
 			if (tz?.length === 0) {
-				tz = cityTimezones.findFromCityStateProvince(city?.city?.name)
+				tz = cityTimezones.findFromCityStateProvince(city?.city?.city)
 			}
 
 			timeZone = tz[0]?.timezone || timeZone
@@ -51,7 +59,7 @@ export default function City({ city, timeZoneMode }: { city: City | undefined; t
 			) : (
 				<>
 					<h3 className="mb-3 p-1 text-3xl font-bold text-transparent bg-clip-text bg-slate-200">
-						{city?.city?.name}
+						{cityName}
 					</h3>
 					<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
 						<h4 className="mr-3">Sunrise</h4>
