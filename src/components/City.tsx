@@ -22,18 +22,18 @@ export default function City({
 		let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 		// If the time zone mode is 'actual', try to find the time zone by city name
-		if (timeZoneMode === "actual" && city?.city?.city) {
+		if (timeZoneMode === "actual" && cityName) {
 			let tz = []
 
 			// Try to find the time zone by city name
-			tz = cityTimezones.lookupViaCity(city?.city?.city)
+			tz = cityTimezones.lookupViaCity(cityName)
 
 			/* 
 				If the city name is not found, try to find the time zone by state 
 				and get the first relevant result
 			*/
 			if (tz?.length === 0) {
-				tz = cityTimezones.findFromCityStateProvince(city?.city?.city)
+				tz = cityTimezones.findFromCityStateProvince(cityName)
 			}
 
 			timeZone = tz[0]?.timezone || timeZone
@@ -44,7 +44,7 @@ export default function City({
 			sunrise: sunriseUtc.tz(timeZone).format("HH:mm"),
 			sunset: sunsetUtc.tz(timeZone).format("HH:mm"),
 		}
-	}, [city, timeZoneMode])
+	}, [city, cityName, timeZoneMode])
 
 	return (
 		<div className="items-center justify-center flex flex-col text-center mb-5">

@@ -10,8 +10,6 @@ export default function Footer({
 }) {
 	return (
 		<section className="flex flex-col items-center justify-center text-center text-gray-400">
-			{/* toggle local | actual */}
-
 			<label className="relative inline-flex items-center mb-5 cursor-pointer">
 				<input
 					type="checkbox"

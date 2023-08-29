@@ -33,7 +33,7 @@ export default function App() {
 				FetchTimes(localCityData.city.lat, localCityData.city.lng)
 					.then((times) => {
 						const city: City = {
-							city: localCityData,
+							data: localCityData,
 							times: times,
 							fetchDate: Date.now(),
 						}
@@ -100,7 +100,7 @@ export default function App() {
 				await FetchTimes(filteredCityData.lat, filteredCityData.lng)
 					.then((times) => {
 						const city: City = {
-							city: filteredCityData,
+							data: filteredCityData,
 							times: times,
 							fetchDate: Date.now(),
 						}
