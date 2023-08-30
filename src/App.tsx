@@ -30,7 +30,7 @@ export default function App() {
 	useEffect(() => {
 		if (localCityData) {
 			if (CalculatePassedDay(localCityData.fetchDate) > 0) {
-				FetchTimes(localCityData.city.lat, localCityData.city.lng)
+				FetchTimes(localCityData.data.lat, localCityData.data.lng)
 					.then((times) => {
 						const city: City = {
 							data: localCityData,
