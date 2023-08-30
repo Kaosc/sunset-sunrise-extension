@@ -1,6 +1,6 @@
-export function CalculatePassedDay(deletedTime: number) {
-	const oneDay = 24 * 60 * 60 * 1000 // hours * minutes * seconds * milliseconds
-	return Math.round(Math.abs((Date.now() - deletedTime) / oneDay))
+export function CalculatePassedDay(fetchDate: number) {
+	const oneDay = 24 * 60 * 60 * 1000 // h * min * sec * ms
+	return Math.round(Math.abs((Date.now() - fetchDate) / oneDay))
 }
 
 export const saveCity = (city: City) => localStorage.setItem("city", JSON.stringify(city))

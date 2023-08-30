@@ -31,7 +31,7 @@ export default function Search({
 	}
 
 	return (
-		<div className="relative flex flex-row w-64 h-10 mb-5 items-center justify-center rounded-full transition-all ease-in-out bg-zinc-800  focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50 hover:bg-zinc-700">
+		<div className="relative flex flex-row w-60 h-10 mb-5 items-center justify-center rounded-full transition-all ease-in-out bg-zinc-800  focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50 hover:bg-zinc-700">
 			<button
 				className="absolute left-3 bottom-[8px] hover:scale-110 transition-all ease-in-out"
 				onClick={handler}

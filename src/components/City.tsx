@@ -1,8 +1,7 @@
 import { useMemo } from "react"
-
-import { FiSunrise, FiSunset } from "react-icons/fi"
 import moment from "moment-timezone"
 import cityTimezones from "city-timezones"
+import { FiSunrise, FiSunset } from "react-icons/fi"
 
 export default function City({
 	city,
@@ -41,8 +40,8 @@ export default function City({
 
 		// Convert to the specified time zone
 		return {
-			sunrise: sunriseUtc.tz(timeZone).format("HH:mm"),
-			sunset: sunsetUtc.tz(timeZone).format("HH:mm"),
+			sunrise: sunriseUtc.tz(timeZone).format("HH:mm"), // 12:00
+			sunset: sunsetUtc.tz(timeZone).format("HH:mm"), // 23:00
 		}
 	}, [city, cityName, timeZoneMode])
 

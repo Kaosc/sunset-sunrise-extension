@@ -28,6 +28,10 @@ export default function App() {
 	const cityName = useRef(localCityName || "")
 
 	useEffect(() => {
+		localStorage.setItem("timeZoneMode", timeZoneMode)
+	}, [timeZoneMode])
+
+	useEffect(() => {
 		if (localCityData) {
 			if (CalculatePassedDay(localCityData.fetchDate) > 0) {
 				FetchTimes(localCityData.data.lat, localCityData.data.lng)
@@ -45,49 +49,22 @@ export default function App() {
 		}
 	}, [])
 
-	useEffect(() => {
-		localStorage.setItem("timeZoneMode", timeZoneMode)
-	}, [timeZoneMode])
-
 	const searchHandler = useCallback(async (e: any, clearInput: Function) => {
 		const search = inputRef.current?.value?.toLowerCase().trim()
 		const action = e.type === "click" || e.key === "Enter"
 
-		if (action && search?.trim()) {
-			// find exact match
-			const exactMatch = cityTimezones.cityMapping.find((cityData) => {
-				const cityDataCityName = cityData.city?.toLowerCase()
-				const cityDataProvinceName = cityData.province?.toLowerCase()
-
-				if (cityDataCityName === search) {
-					return true
-				} else if (cityDataProvinceName === search) {
-					return true
-				} else {
-					return false
-				}
+		if (action && search) {
+			const exactCity = cityTimezones.cityMapping.find((cd) => {
+				return cd.city?.toLowerCase() === search || cd.province?.toLowerCase() === search
+			})
+			const relevantCity: CityData[] = cityTimezones.cityMapping.filter((cd) => {
+				return cd.city?.toLowerCase().includes(search) || cd.province?.toLowerCase()?.includes(search)
 			})
 
-			// find includes match
-			const filteredCityDatas: CityData = cityTimezones.cityMapping.filter((cityData) => {
-				const cityDataCityName = cityData.city?.toLowerCase()
-				const cityDataProvinceName = cityData.province?.toLowerCase()
+			const filteredCityData = exactCity || relevantCity[0]
 
-				if (cityData.city === search) {
-					return true
-				} else if (cityDataCityName.includes(search)) {
-					return true
-				} else if (cityDataProvinceName?.includes(search)) {
-					return true
-				} else {
-					return false
-				}
-			})[0]
-
-			if (exactMatch || filteredCityDatas) {
-				const filteredCityData = exactMatch || filteredCityDatas
-
-				// Set city name
+			if (filteredCityData) {
+				// Set city name as searched city name or province name
 				if (filteredCityData.city?.toLowerCase().includes(search)) {
 					cityName.current = filteredCityData.city
 				} else {
@@ -107,24 +84,29 @@ export default function App() {
 
 						setCity(city)
 						saveCity(city)
-
-						if (inputRef.current) {
-							inputRef.current.value = ""
-						}
 					})
 					.catch((e) => console.debug(e))
 			}
 		}
 	}, [])
 
-	// prettier-ignore
 	return (
 		<main className="min-h-screen bg-gradient-to-r from-zinc-950 to-zinc-900">
 			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
-				<Search inputRef={inputRef} searchHandler={searchHandler} />
-				<City city={city} timeZoneMode={timeZoneMode} cityName={cityName.current} />
-				<Footer setTimeZoneMode={setTimeZoneMode} timeZoneMode={timeZoneMode} />
+				<Search
+					inputRef={inputRef}
+					searchHandler={searchHandler}
+				/>
+				<City
+					city={city}
+					timeZoneMode={timeZoneMode}
+					cityName={cityName.current}
+				/>
+				<Footer
+					setTimeZoneMode={setTimeZoneMode}
+					timeZoneMode={timeZoneMode}
+				/>
 			</div>
 		</main>
 	)

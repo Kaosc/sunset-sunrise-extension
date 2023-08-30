@@ -1,4 +1,5 @@
 import { FiGithub } from "react-icons/fi"
+
 import { GITHUB_REPO, LOGO_URL } from "../utils/constants"
 
 export default function Header() {
