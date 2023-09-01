@@ -10,14 +10,15 @@ import {
 	saveCityName,
 } from "./utils/utils"
 
-import City from "./components/City"
+import CityTimes from "./components/CityTimes"
 import Search from "./components/Search"
 import Header from "./components/Header"
 
 import FetchTimes from "./api/FetchTimes"
 import Footer from "./components/Footer"
+import { City } from "./types"
 
-const localCityData = getLocalCity()
+const localCityData: City | undefined = getLocalCity()
 const localCityName = getLocalCityName()
 
 export default function App() {
@@ -33,11 +34,11 @@ export default function App() {
 
 	useEffect(() => {
 		if (localCityData) {
-			if (CalculatePassedDay(localCityData.fetchDate) > 0) {
+			if (CalculatePassedDay(localCityData.fetchDate) > 1) {
 				FetchTimes(localCityData.data.lat, localCityData.data.lng)
 					.then((times) => {
 						const city: City = {
-							data: localCityData,
+							...localCityData,
 							times: times,
 							fetchDate: Date.now(),
 						}
@@ -82,8 +83,8 @@ export default function App() {
 							fetchDate: Date.now(),
 						}
 
-						setCity(city)
 						saveCity(city)
+						setCity(city)
 					})
 					.catch((e) => console.debug(e))
 			}
@@ -98,7 +99,7 @@ export default function App() {
 					inputRef={inputRef}
 					searchHandler={searchHandler}
 				/>
-				<City
+				<CityTimes
 					city={city}
 					timeZoneMode={timeZoneMode}
 					cityName={cityName.current}

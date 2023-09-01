@@ -1,12 +1,12 @@
 import { FiGithub } from "react-icons/fi"
 
-import { GITHUB_REPO, LOGO_URL } from "../utils/constants"
+import { GITHUB_REPO } from "../utils/constants"
 
 export default function Header() {
 	return (
 		<div className="flex flex-row items-center justify-center my-5">
 			<img
-				src={LOGO_URL}
+				src="../assets/logo.png"
 				alt="logo"
 				width={23}
 				height={23}

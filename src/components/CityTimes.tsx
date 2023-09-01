@@ -2,8 +2,9 @@ import { useMemo } from "react"
 import moment from "moment-timezone"
 import cityTimezones from "city-timezones"
 import { FiSunrise, FiSunset } from "react-icons/fi"
+import { City } from "../types"
 
-export default function City({
+export default function CityTimes({
 	city,
 	cityName,
 	timeZoneMode,
@@ -51,13 +52,13 @@ export default function City({
 				<img
 					src="/assets/kitty-dark.png"
 					alt="kitty"
-					width={136}
-					height={136}
+					width={140}
+					height={140}
 					className="animate-pulse"
 				/>
 			) : (
 				<>
-					<h3 className="mb-3 p-1 text-3xl font-bold text-transparent bg-clip-text bg-slate-200">
+					<h3 className="mb-3 p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200">
 						{cityName}
 					</h3>
 					<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
