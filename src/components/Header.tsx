@@ -6,13 +6,13 @@ export default function Header() {
 	return (
 		<div className="flex flex-row items-center justify-center my-5">
 			<img
-				src="../assets/logo.png"
+				src="/assets/logo.png"
 				alt="logo"
-				width={23}
-				height={23}
+				width={22}
+				height={22}
 				className="mr-3"
 			/>
-			<h4 className="text-base font-bold bg-gradient-to-r from-zinc-400 to-zinc-500 text-transparent bg-clip-text">
+			<h4 className="text-sm font-bold bg-gradient-to-r from-zinc-400 to-zinc-500 text-transparent bg-clip-text">
 				Sunset Sunrise
 			</h4>
 			<a
@@ -22,7 +22,7 @@ export default function Header() {
 				className="ml-3 hover:text-gray-300 hover:animate-pulse"
 			>
 				<FiGithub
-					size={18}
+					size={16}
 					className="text-gray-400 hover:text-white"
 				/>
 			</a>
