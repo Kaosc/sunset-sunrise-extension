@@ -10,3 +10,6 @@
 <div align="center">
   Times By <a href="https://sunrise-sunset.org/"> sunrise-sunset.org </a>
 </div>
+<div align="center">
+   <a href="https://github.com/kevinroberts/city-timezones"> Timezone Database </a> By <a href="https://github.com/kevinroberts"> @kevinroberts </a>
+</div>
