@@ -55,7 +55,7 @@ export default function CityTimes({
 	}, [city, cityName, timeZoneMode])
 
 	return (
-		<div className="items-center justify-center flex flex-col text-center mb-5 transition-all ease-in-out">
+		<div className="items-center justify-center flex flex-col text-center mb-4 transition-all ease-in-out">
 			{!city ? (
 				<img
 					src="/assets/kitty-dark.png"
@@ -81,37 +81,41 @@ export default function CityTimes({
 							{cityName}
 						</h3>
 						<div
-							className={`${refreshing ? "animate-spin" : "animate-pulse"}`}
+							className={`${visible ? "visible" : "invisible"} ${
+								refreshing ? "animate-spin" : "animate-pulse"
+							}`}
 							title="Refresh"
 						>
 							<IoMdRefresh
 								size={23}
 								className={`text-[#ffffff] first-line:cursor-pointer animate-in slide-in-from-left-0 duration-300 transition-all ease-in-out 
-								${visible ? "opacity-100" : "opacity-0 delay-75"}`}
+								${visible ? "opacity-100 delay-0" : "opacity-0 delay-75"}`}
 								onClick={() => setRefreshing(true)}
 							/>
 						</div>
 					</div>
 					<div
-						className={`flex flex-col items-center justify-center animate-in fade-in-0 duration-1000 transition-all ease-in-out${
-							refreshing ? "hidden animate-out fade-out-0" : "static"
+						className={`flex flex-col items-center justify-center transition-all ease-in-out ${
+							refreshing ? "animate-out fade-out-0 duration-500 -mb-20" : "animate-in fade-in-0 duration-500"
 						}`}
 					>
-						<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
-							<h4 className="mr-3">Sunrise</h4>
-							<FiSunrise
-								size={25}
-								className="text-[#df8a3a] mr-2"
-							/>
-							<h4>{times.sunrise}</h4>
-						</div>
-						<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#757ab9] to-[#375cc2]">
-							<h4 className="mr-3">Sunset</h4>
-							<FiSunset
-								size={25}
-								className="text-[#757ab9] mr-2"
-							/>
-							<h4>{times.sunset}</h4>
+						<div className={`${refreshing ? "opacity-0 delay-500" : "opacity-100 delay-0"}`}>
+							<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
+								<h4 className="mr-3">Sunrise</h4>
+								<FiSunrise
+									size={25}
+									className="text-[#df8a3a] mr-2"
+								/>
+								<h4>{times.sunrise}</h4>
+							</div>
+							<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#757ab9] to-[#375cc2]">
+								<h4 className="mr-3">Sunset</h4>
+								<FiSunset
+									size={25}
+									className="text-[#757ab9] mr-2"
+								/>
+								<h4>{times.sunset}</h4>
+							</div>
 						</div>
 					</div>
 				</>

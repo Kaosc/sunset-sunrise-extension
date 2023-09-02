@@ -97,7 +97,7 @@ export default function App() {
 
 	return (
 		<main
-			className="min-h-screen bg-gradient-to-r from-zinc-950 to-zinc-900"
+			className="bg-gradient-to-r from-zinc-950 to-zinc-900"
 			onMouseEnter={() => setSearchBarVisible(true)}
 			onMouseLeave={() => setSearchBarVisible(false)}
 		>
@@ -132,7 +132,6 @@ export default function App() {
 						setRefreshing={setRefreshing}
 					/>
 				</div>
-
 				<Footer
 					setTimeZoneMode={setTimeZoneMode}
 					timeZoneMode={timeZoneMode}
