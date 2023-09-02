@@ -20,11 +20,12 @@ export default function Footer({
 					onChange={(e) => setTimeZoneMode(e.target.checked ? "actual" : "local")}
 				/>
 				<div
+					title="Toggle between the city's actual time zone and your local time zone"
 					className="w-8 h-4 bg-[#2b2b2b] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px]
 				 after:bg-white after:border after:rounded-full after:h-[16px] after:w-[16px] after:transition-all peer-checked:bg-[#575757]"
 				></div>
 				<span className="ml-3 text-sm font-medium text-gray-400">
-					{timeZoneMode === "local" ? "Local" : "Actual"} Time{" "}
+					{timeZoneMode === "local" ? "Local" : "Actual"} Time
 				</span>
 			</label>
 			<a

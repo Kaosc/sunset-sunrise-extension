@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.7"
   },
   "eslintConfig": {
     "extends": [

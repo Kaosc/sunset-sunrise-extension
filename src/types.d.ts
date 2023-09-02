@@ -1,5 +1,3 @@
-import { CityData } from "city-timezones"
-
 type City = {
 	data: CityData
 	times: Times

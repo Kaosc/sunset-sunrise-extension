@@ -1,19 +1,27 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import moment from "moment-timezone"
 import cityTimezones from "city-timezones"
 import { FiSunrise, FiSunset } from "react-icons/fi"
-import { City } from "../types"
+import { IoMdRefresh } from "react-icons/io"
 
 export default function CityTimes({
 	city,
 	cityName,
 	timeZoneMode,
+	refreshing,
+	setRefreshing,
 }: {
 	city: City | undefined
 	cityName: string
 	timeZoneMode: string
+	refreshing: boolean
+	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+	const [visible, setVisible] = useState(false)
+
 	const times = useMemo(() => {
+		setVisible(false)
+
 		// Get sunrise and sunset times from the API response
 		const sunriseUtc = moment.utc(city?.times.sunrise)
 		const sunsetUtc = moment.utc(city?.times.sunset)
@@ -47,7 +55,7 @@ export default function CityTimes({
 	}, [city, cityName, timeZoneMode])
 
 	return (
-		<div className="items-center justify-center flex flex-col text-center mb-5">
+		<div className="items-center justify-center flex flex-col text-center mb-5 transition-all ease-in-out">
 			{!city ? (
 				<img
 					src="/assets/kitty-dark.png"
@@ -58,24 +66,53 @@ export default function CityTimes({
 				/>
 			) : (
 				<>
-					<h3 className="mb-3 p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200">
-						{cityName}
-					</h3>
-					<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
-						<h4 className="mr-3">Sunrise</h4>
-						<FiSunrise
-							size={25}
-							className="text-[#df8a3a] mr-2"
-						/>
-						<h4>{times.sunrise}</h4>
+					<div
+						className="flex items-center justify-center transition-all ease-in-out"
+						onMouseEnter={() => setVisible(true)}
+						onMouseLeave={() => setVisible(false)}
+					>
+						<h3
+							className={`mb-3 p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${
+								visible
+									? "mr-1 animate-in slide-in-from-righ-0 duration-500"
+									: "-mr-6 animate-out slide-out-to-right-0 duration-500"
+							} `}
+						>
+							{cityName}
+						</h3>
+						<div
+							className={`${refreshing ? "animate-spin" : "animate-pulse"}`}
+							title="Refresh"
+						>
+							<IoMdRefresh
+								size={23}
+								className={`text-[#ffffff] first-line:cursor-pointer animate-in slide-in-from-left-0 duration-300 transition-all ease-in-out 
+								${visible ? "opacity-100" : "opacity-0 delay-75"}`}
+								onClick={() => setRefreshing(true)}
+							/>
+						</div>
 					</div>
-					<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#757ab9] to-[#375cc2]">
-						<h4 className="mr-3">Sunset</h4>
-						<FiSunset
-							size={25}
-							className="text-[#757ab9] mr-2"
-						/>
-						<h4>{times.sunset}</h4>
+					<div
+						className={`flex flex-col items-center justify-center animate-in fade-in-0 duration-1000 transition-all ease-in-out${
+							refreshing ? "hidden animate-out fade-out-0" : "static"
+						}`}
+					>
+						<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#caa23c] to-[#c9520d]">
+							<h4 className="mr-3">Sunrise</h4>
+							<FiSunrise
+								size={25}
+								className="text-[#df8a3a] mr-2"
+							/>
+							<h4>{times.sunrise}</h4>
+						</div>
+						<div className="flex items-center mb-2 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#757ab9] to-[#375cc2]">
+							<h4 className="mr-3">Sunset</h4>
+							<FiSunset
+								size={25}
+								className="text-[#757ab9] mr-2"
+							/>
+							<h4>{times.sunset}</h4>
+						</div>
 					</div>
 				</>
 			)}
