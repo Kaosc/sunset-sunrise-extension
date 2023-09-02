@@ -17,6 +17,7 @@ export default function CityTimes({
 	refreshing: boolean
 	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+	console.log("CityTimes")
 	const [visible, setVisible] = useState(false)
 
 	const times = useMemo(() => {
@@ -67,15 +68,15 @@ export default function CityTimes({
 			) : (
 				<>
 					<div
-						className="flex items-center justify-center transition-all ease-in-out"
+						className="flex flex-col items-center justify-center transition-all ease-in-out"
 						onMouseEnter={() => setVisible(true)}
 						onMouseLeave={() => setVisible(false)}
 					>
 						<h3
-							className={`mb-3 p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${
+							className={`p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${
 								visible
-									? "mr-1 animate-in slide-in-from-righ-0 duration-500"
-									: "-mr-6 animate-out slide-out-to-right-0 duration-500"
+									? "animate-in slide-in-from-bottom-0 duration-500"
+									: "-mb-8 animate-out slide-out-to-bottom-0 duration-500"
 							} `}
 						>
 							{cityName}
@@ -88,7 +89,7 @@ export default function CityTimes({
 						>
 							<IoMdRefresh
 								size={23}
-								className={`text-[#ffffff] first-line:cursor-pointer animate-in slide-in-from-left-0 duration-300 transition-all ease-in-out 
+								className={`text-[#ffffff] first-line:cursor-pointer animate-in m-3 slide-in-from-left-0 duration-300 transition-all ease-in-out 
 								${visible ? "opacity-100 delay-0" : "opacity-0 delay-75"}`}
 								onClick={() => setRefreshing(true)}
 							/>
@@ -96,7 +97,7 @@ export default function CityTimes({
 					</div>
 					<div
 						className={`flex flex-col items-center justify-center transition-all ease-in-out ${
-							refreshing ? "animate-out fade-out-0 duration-500 -mb-20" : "animate-in fade-in-0 duration-500"
+							refreshing ? "animate-out fade-out-0 duration-500 -mb-20" : `animate-in fade-in-0 duration-300`
 						}`}
 					>
 						<div className={`${refreshing ? "opacity-0 delay-500" : "opacity-100 delay-0"}`}>

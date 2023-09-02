@@ -97,18 +97,18 @@ export default function App() {
 
 	return (
 		<main
-			className="bg-gradient-to-r from-zinc-950 to-zinc-900"
+			className="bg-gradient-to-r from-zinc-950 to-zinc-900 px-3"
 			onMouseEnter={() => setSearchBarVisible(true)}
 			onMouseLeave={() => setSearchBarVisible(false)}
 		>
 			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
 				<div
-					className={`${
+					className={`transition-all ease-in-out ${
 						searchBarVisible
-							? "animate-in fade-in-0 zoom-in-75 static"
-							: "zoom-out-75 animate-out fade-out-0 duration-500"
-					} transition-all ease-in-out`}
+							? "animate-in fade-in-0 zoom-in-75"
+							: "animate-out zoom-out-75 fade-out-0 duration-500"
+					} `}
 				>
 					<div className={`${searchBarVisible ? "" : "opacity-0 delay-500"}`}>
 						<Search
@@ -118,11 +118,11 @@ export default function App() {
 					</div>
 				</div>
 				<div
-					className={`${
+					className={`transition-all ease-in-out ${
 						searchBarVisible
 							? "animate-in slide-in-from-top-0 duration-300"
 							: "animate-out slide-out-to-top-0 -mt-16 duration-700"
-					} transition-all ease-in-out`}
+					} `}
 				>
 					<CityTimes
 						city={city}
