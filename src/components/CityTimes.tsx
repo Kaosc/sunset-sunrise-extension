@@ -17,7 +17,6 @@ export default function CityTimes({
 	refreshing: boolean
 	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-	console.log("CityTimes")
 	const [visible, setVisible] = useState(false)
 
 	const times = useMemo(() => {
