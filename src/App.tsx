@@ -105,12 +105,12 @@ export default function App() {
 				<Header />
 				<div
 					className={`transition-all ease-in-out ${
-						searchBarVisible
+						searchBarVisible || !city
 							? "animate-in fade-in-0 zoom-in-75"
 							: "animate-out zoom-out-75 fade-out-0 duration-500"
 					} `}
 				>
-					<div className={`${searchBarVisible ? "" : "opacity-0 delay-500"}`}>
+					<div className={`${searchBarVisible || !city ? "" : "opacity-0 delay-500"}`}>
 						<Search
 							inputRef={inputRef}
 							searchHandler={searchHandler}
@@ -119,7 +119,7 @@ export default function App() {
 				</div>
 				<div
 					className={`transition-all ease-in-out ${
-						searchBarVisible
+						searchBarVisible || !city
 							? "animate-in slide-in-from-top-0 duration-300"
 							: "animate-out slide-out-to-top-0 -mt-16 duration-700"
 					} `}
