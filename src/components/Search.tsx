@@ -69,10 +69,10 @@ export default function Search({
 				)}
 			</div>
 			<div
-				className={`flexflex-col h-10 items-center justify-center text-center text-red-500 transition-all ease-in-out duration-300
+				className={`flex flex-col h-10 items-center justify-center text-center text-red-500 transition-all ease-in-out duration-300
 				${notFound ? "animate-in slide-in-from-top-0" : "animate-out slide-out-to-bottom-0"}`}
 			>
-				<div className={`${notFound ? "opacity-100 delay-75 pt-5" : "opacity-0"}`}>
+				<div className={`${notFound ? "opacity-100 delay-75 mt-10" : "opacity-0"}`}>
 					<p>No City Found for</p>
 					<p className="font-bold truncate max-w-[250px]">{notFound}</p>
 				</div>

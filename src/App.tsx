@@ -122,8 +122,8 @@ export default function App() {
 				<div
 					className={`transition-all ease-in-out ${
 						searchBarVisible || !city
-							? "animate-in fade-in-0 zoom-in-75 mb-9"
-							: "animate-out zoom-out-75 fade-out-0 duration-500 mb-7"
+							? "animate-in fade-in-0 zoom-in-75 mb-8"
+							: "animate-out zoom-out-75 fade-out-0 duration-500 mb-5"
 					} `}
 				>
 					<div className={`${searchBarVisible || !city ? "" : "opacity-0 delay-500"}`}>
