@@ -9,6 +9,10 @@ export default function Footer({
 	timeZoneMode: string
 	setTimeZoneMode: React.Dispatch<React.SetStateAction<string>>
 }) {
+	const handleTimeZoneMode = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setTimeZoneMode(e.target.checked ? "actual" : "local")
+	}
+
 	return (
 		<section className="flex flex-col items-center justify-center text-center text-gray-400">
 			<label className="relative inline-flex items-center mb-5 cursor-pointer">
@@ -17,7 +21,7 @@ export default function Footer({
 					value={timeZoneMode}
 					checked={timeZoneMode === "actual"}
 					className="sr-only peer"
-					onChange={(e) => setTimeZoneMode(e.target.checked ? "actual" : "local")}
+					onChange={handleTimeZoneMode}
 				/>
 				<div
 					title="Toggle between the city's actual time zone and your local time zone"

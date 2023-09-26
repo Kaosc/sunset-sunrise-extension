@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react"
 import moment from "moment-timezone"
 import cityTimezones from "city-timezones"
-import { FiSunrise, FiSunset } from "react-icons/fi"
+
 import { IoMdRefresh } from "react-icons/io"
+import { FiSunrise, FiSunset } from "react-icons/fi"
 
 export default function CityTimes({
 	city,
@@ -18,6 +19,14 @@ export default function CityTimes({
 	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 }) {
 	const [visible, setVisible] = useState(false)
+
+	const handleVisibleToggle = () => {
+		setVisible((prev) => !prev)
+	}
+
+	const handleRefresh = () => {
+		setRefreshing(true)
+	}
 
 	const times = useMemo(() => {
 		setVisible(false)
@@ -68,8 +77,8 @@ export default function CityTimes({
 				<>
 					<div
 						className="flex flex-col items-center justify-center transition-all ease-in-out"
-						onMouseEnter={() => setVisible(true)}
-						onMouseLeave={() => setVisible(false)}
+						onMouseEnter={handleVisibleToggle}
+						onMouseLeave={handleVisibleToggle}
 					>
 						<h3
 							className={`p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${
@@ -90,7 +99,7 @@ export default function CityTimes({
 								size={23}
 								className={`text-[#ffffff] first-line:cursor-pointer animate-in m-3 slide-in-from-left-0 duration-300 transition-all ease-in-out 
 								${visible ? "opacity-100 delay-0" : "opacity-0 delay-75"}`}
-								onClick={() => setRefreshing(true)}
+								onClick={handleRefresh}
 							/>
 						</div>
 					</div>

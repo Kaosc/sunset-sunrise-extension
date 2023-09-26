@@ -27,6 +27,7 @@ export default function App() {
 	const [timeZoneMode, setTimeZoneMode] = useState(getLocalTimeZoneMode())
 	const [searchBarVisible, setSearchBarVisible] = useState(false)
 	const [refreshing, setRefreshing] = useState(false)
+	const [notFound, setNotFound] = useState("")
 
 	const inputRef = useRef<HTMLInputElement>(null)
 	const cityName = useRef(localCityName || "")
@@ -68,6 +69,12 @@ export default function App() {
 
 			const filteredCityData = exactCity || relevantCity[0]
 
+			if (!filteredCityData) {
+				setNotFound(search)
+			} else {
+				setNotFound("")
+			}
+
 			if (filteredCityData) {
 				// Set city name as searched city name or province name
 				if (filteredCityData.city?.toLowerCase().includes(search)) {
@@ -95,34 +102,48 @@ export default function App() {
 		}
 	}, [])
 
+	const openSearchBar = () => {
+		setSearchBarVisible(true)
+		inputRef.current?.focus()
+	}
+
+	const closeSearchBar = () => {
+		setSearchBarVisible(false)
+	}
+
 	return (
 		<main
 			className="bg-gradient-to-r from-zinc-950 to-zinc-900 px-3"
-			onMouseEnter={() => setSearchBarVisible(true)}
-			onMouseLeave={() => setSearchBarVisible(false)}
+			onMouseEnter={openSearchBar}
+			onMouseLeave={closeSearchBar}
 		>
 			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
 				<div
 					className={`transition-all ease-in-out ${
 						searchBarVisible || !city
-							? "animate-in fade-in-0 zoom-in-75"
-							: "animate-out zoom-out-75 fade-out-0 duration-500"
+							? "animate-in fade-in-0 zoom-in-75 mb-9"
+							: "animate-out zoom-out-75 fade-out-0 duration-500 mb-7"
 					} `}
 				>
 					<div className={`${searchBarVisible || !city ? "" : "opacity-0 delay-500"}`}>
 						<Search
 							inputRef={inputRef}
 							searchHandler={searchHandler}
+							notFound={notFound}
+							setNotFound={setNotFound}
 						/>
 					</div>
 				</div>
 				<div
-					className={`transition-all ease-in-out ${
-						searchBarVisible || !city
-							? "animate-in slide-in-from-top-0 duration-300"
-							: "animate-out slide-out-to-top-0 -mt-16 duration-700"
-					} `}
+					className={`transition-all ease-in-out 
+						${
+							searchBarVisible || !city
+								? `animate-in slide-in-from-top-0 duration-300`
+								: `animate-out slide-out-to-top-0 -mt-28 duration-700`
+						} 
+						${searchBarVisible && notFound ? "" : "-mt-16"}
+					`}
 				>
 					<CityTimes
 						city={city}

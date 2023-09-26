@@ -1,6 +1,7 @@
 import { FiGithub } from "react-icons/fi"
+import { FiStar } from "react-icons/fi"
 
-import { GITHUB_REPO } from "../utils/constants"
+import { GITHUB_REPO, WEB_STORE_URL } from "../utils/constants"
 
 export default function Header() {
 	return (
@@ -22,6 +23,17 @@ export default function Header() {
 				className="ml-3 hover:text-gray-300 hover:animate-pulse"
 			>
 				<FiGithub
+					size={16}
+					className="text-gray-400 hover:text-white"
+				/>
+			</a>
+			<a
+				href={WEB_STORE_URL}
+				target="_blank"
+				rel="noreferrer"
+				className="ml-3 hover:text-gray-300 hover:animate-pulse"
+			>
+				<FiStar
 					size={16}
 					className="text-gray-400 hover:text-white"
 				/>
