@@ -18,6 +18,7 @@ import Header from "./components/Header"
 
 import FetchTimes from "./api/FetchTimes"
 import Footer from "./components/Footer"
+import ActivityIndicator from "./components/ActivityIndicator"
 
 const localCityData: City | undefined = getLocalCity()
 const localCityName = getLocalCityName()
@@ -28,6 +29,7 @@ export default function App() {
 	const [searchBarVisible, setSearchBarVisible] = useState(false)
 	const [refreshing, setRefreshing] = useState(false)
 	const [notFound, setNotFound] = useState("")
+	const [searcing, setSearcing] = useState(false)
 
 	const inputRef = useRef<HTMLInputElement>(null)
 	const cityName = useRef(localCityName || "")
@@ -56,6 +58,8 @@ export default function App() {
 	}, [refreshing])
 
 	const searchHandler = useCallback(async (e: any, clearInput: Function) => {
+		setSearcing(true)
+
 		const search = inputRef.current?.value?.toLowerCase().trim()
 		const action = e.type === "click" || e.key === "Enter"
 
@@ -100,6 +104,8 @@ export default function App() {
 					.catch((e) => console.error(e))
 			}
 		}
+
+		setSearcing(false)
 	}, [])
 
 	const openSearchBar = () => {
@@ -119,24 +125,28 @@ export default function App() {
 		>
 			<div className="flex flex-col items-center justify-center bg-gradient-to-r from-zinc-950 to-zinc-900">
 				<Header />
-				<div
-					className={`transition-all ease-in-out ${
-						searchBarVisible || !city
-							? "animate-in fade-in-0 zoom-in-75 mb-8"
-							: "animate-out zoom-out-75 fade-out-0 duration-500 mb-5"
-					} `}
-				>
-					<div className={`${searchBarVisible || !city ? "" : "opacity-0 delay-500"}`}>
-						<Search
-							inputRef={inputRef}
-							searchHandler={searchHandler}
-							notFound={notFound}
-							setNotFound={setNotFound}
-						/>
-					</div>
-				</div>
-				<div
-					className={`transition-all ease-in-out 
+				{searcing ? (
+					<ActivityIndicator />
+				) : (
+					<>
+						<div
+							className={`transition-all ease-in-out ${
+								searchBarVisible || !city
+									? "animate-in fade-in-0 zoom-in-75 mb-8"
+									: "animate-out zoom-out-75 fade-out-0 duration-500 mb-5"
+							} `}
+						>
+							<div className={`${searchBarVisible || !city ? "" : "opacity-0 delay-500"}`}>
+								<Search
+									inputRef={inputRef}
+									searchHandler={searchHandler}
+									notFound={notFound}
+									setNotFound={setNotFound}
+								/>
+							</div>
+						</div>
+						<div
+							className={`transition-all ease-in-out 
 						${
 							searchBarVisible || !city
 								? `animate-in slide-in-from-top-0 duration-300`
@@ -144,19 +154,21 @@ export default function App() {
 						} 
 						${searchBarVisible && notFound ? "" : "-mt-16"}
 					`}
-				>
-					<CityTimes
-						city={city}
-						timeZoneMode={timeZoneMode}
-						cityName={cityName.current}
-						refreshing={refreshing}
-						setRefreshing={setRefreshing}
-					/>
-				</div>
-				<Footer
-					setTimeZoneMode={setTimeZoneMode}
-					timeZoneMode={timeZoneMode}
-				/>
+						>
+							<CityTimes
+								city={city}
+								timeZoneMode={timeZoneMode}
+								cityName={cityName.current}
+								refreshing={refreshing}
+								setRefreshing={setRefreshing}
+							/>
+						</div>
+						<Footer
+							setTimeZoneMode={setTimeZoneMode}
+							timeZoneMode={timeZoneMode}
+						/>
+					</>
+				)}
 			</div>
 		</main>
 	)

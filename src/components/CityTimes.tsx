@@ -20,10 +20,6 @@ export default function CityTimes({
 }) {
 	const [visible, setVisible] = useState(false)
 
-	const handleVisibleToggle = () => {
-		setVisible((prev) => !prev)
-	}
-
 	const handleRefresh = () => {
 		setRefreshing(true)
 	}
@@ -77,8 +73,8 @@ export default function CityTimes({
 				<>
 					<div
 						className="flex flex-col items-center justify-center transition-all ease-in-out"
-						onMouseEnter={handleVisibleToggle}
-						onMouseLeave={handleVisibleToggle}
+						onMouseEnter={() => setVisible(true)}
+						onMouseLeave={() => setVisible(false)}
 					>
 						<h3
 							className={`p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${

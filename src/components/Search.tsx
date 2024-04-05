@@ -43,7 +43,7 @@ export default function Search({
 				>
 					<BiSearchAlt2
 						size={24}
-						className="text-gray-400  hover:text-white"
+						className="text-gray-400 hover:text-white"
 					/>
 				</button>
 				<input
