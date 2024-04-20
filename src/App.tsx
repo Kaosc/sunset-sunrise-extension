@@ -25,6 +25,7 @@ const localCityName = getLocalCityName()
 
 export default function App() {
 	const [city, setCity] = useState<City | undefined>(localCityData)
+	const [hour12, setHour12] = useState(JSON.parse(localStorage.getItem("hour12") || "true"))
 	const [timeZoneMode, setTimeZoneMode] = useState(getLocalTimeZoneMode())
 	const [searchBarVisible, setSearchBarVisible] = useState(false)
 	const [refreshing, setRefreshing] = useState(false)
@@ -161,11 +162,14 @@ export default function App() {
 								cityName={cityName.current}
 								refreshing={refreshing}
 								setRefreshing={setRefreshing}
+								hour12={hour12}
 							/>
 						</div>
 						<Footer
 							setTimeZoneMode={setTimeZoneMode}
 							timeZoneMode={timeZoneMode}
+							hour12={hour12}
+							setHour12={setHour12}
 						/>
 					</>
 				)}

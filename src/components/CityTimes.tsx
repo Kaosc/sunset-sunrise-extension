@@ -11,12 +11,14 @@ export default function CityTimes({
 	timeZoneMode,
 	refreshing,
 	setRefreshing,
+	hour12,
 }: {
 	city: City | undefined
 	cityName: string
 	timeZoneMode: string
 	refreshing: boolean
 	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
+	hour12: boolean
 }) {
 	const [visible, setVisible] = useState(false)
 
@@ -26,6 +28,8 @@ export default function CityTimes({
 
 	const times = useMemo(() => {
 		setVisible(false)
+
+		const timeFormat = hour12 ? "hh:mm A" : "HH:mm"
 
 		// Get sunrise and sunset times from the API response
 		const sunriseUtc = moment.utc(city?.times.sunrise)
@@ -54,10 +58,10 @@ export default function CityTimes({
 
 		// Convert to the specified time zone
 		return {
-			sunrise: sunriseUtc.tz(timeZone).format("HH:mm"), // 12:00
-			sunset: sunsetUtc.tz(timeZone).format("HH:mm"), // 23:00
+			sunrise: sunriseUtc.tz(timeZone).format(timeFormat), // 12:00
+			sunset: sunsetUtc.tz(timeZone).format(timeFormat), // 23:00
 		}
-	}, [city, cityName, timeZoneMode])
+	}, [city, cityName, timeZoneMode, hour12])
 
 	return (
 		<div className="items-center justify-center flex flex-col text-center mb-4 transition-all ease-in-out">
