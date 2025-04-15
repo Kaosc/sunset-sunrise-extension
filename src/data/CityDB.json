@@ -19921,7 +19921,7 @@
     "timezone": "America/Santiago"
   },
   {
-    "city": "Los Angeles",
+    "city": "Los Ángeles",
     "city_ascii": "Los Angeles",
     "lat": -37.46000161,
     "lng": -72.35998661,
@@ -85615,8 +85615,8 @@
   {
     "city": "Los Angeles",
     "city_ascii": "Los Angeles",
-    "lat": 33.98997825,
-    "lng": -118.1799805,
+    "lat": 34.0522,
+    "lng": -118.2437,
     "pop": 8097410,
     "country": "United States of America",
     "iso2": "US",

@@ -3,14 +3,7 @@ import { CityData } from "city-timezones"
 
 import CityDB from "./data/CityDB.json"
 
-import {
-	CalculatePassedDay,
-	getLocalCity,
-	getLocalCityName,
-	getLocalTimeZoneMode,
-	saveCity,
-	saveCityName,
-} from "./utils/utils"
+import { CalculatePassedDay, getLocalCity, getLocalTimeZoneMode, saveCity } from "./utils/utils"
 
 import CityTimes from "./components/CityTimes"
 import Search from "./components/Search"
@@ -21,7 +14,6 @@ import Footer from "./components/Footer"
 import ActivityIndicator from "./components/ActivityIndicator"
 
 const localCityData: City | undefined = getLocalCity()
-const localCityName = getLocalCityName()
 
 export default function App() {
 	const [city, setCity] = useState<City | undefined>(localCityData)
@@ -33,30 +25,29 @@ export default function App() {
 	const [searcing, setSearcing] = useState(false)
 
 	const inputRef = useRef<HTMLInputElement>(null)
-	const cityName = useRef(localCityName || "")
 
 	useEffect(() => {
 		localStorage.setItem("timeZoneMode", timeZoneMode)
 	}, [timeZoneMode])
 
 	useEffect(() => {
-		if (localCityData) {
-			if (CalculatePassedDay(localCityData.fetchDate) >= 1 || refreshing) {
-				FetchTimes(localCityData.data.lat, localCityData.data.lng)
+		if (city) {
+			if (CalculatePassedDay(city.fetchDate) >= 1 || refreshing) {
+				FetchTimes(city.data.lat, city.data.lng)
 					.then((times) => {
-						const city: City = {
-							...localCityData,
+						const updatedCity: City = {
+							...city,
 							times: times,
 							fetchDate: Date.now(),
 						}
-						saveCity(city)
-						setCity(city)
+						saveCity(updatedCity)
+						setCity(updatedCity)
 					})
 					.catch((e) => console.error(e))
 					.finally(() => setRefreshing(false))
 			}
 		}
-	}, [refreshing])
+	}, [refreshing, city])
 
 	const searchHandler = useCallback(async (e: any, clearInput: Function) => {
 		setSearcing(true)
@@ -66,10 +57,10 @@ export default function App() {
 
 		if (action && search) {
 			const exactCity = CityDB.find((cd: CityData) => {
-				return cd.city?.toLowerCase() === search || cd.province?.toLowerCase() === search
+				return cd.city?.toLowerCase().replace(",", "") === search || cd.province?.toLowerCase() === search
 			})
 			const relevantCity: CityData[] = CityDB.filter((cd: CityData) => {
-				return cd.city?.toLowerCase().includes(search) || cd.province?.toLowerCase()?.includes(search)
+				return cd.city?.toLowerCase().replace(",", "").includes(search) || cd.province?.toLowerCase()?.includes(search)
 			})
 
 			const filteredCityData = exactCity || relevantCity[0]
@@ -81,14 +72,6 @@ export default function App() {
 			}
 
 			if (filteredCityData) {
-				// Set city name as searched city name or province name
-				if (filteredCityData.city?.toLowerCase().includes(search)) {
-					cityName.current = filteredCityData.city
-				} else {
-					cityName.current = filteredCityData.province
-				}
-
-				saveCityName(cityName.current)
 				clearInput()
 
 				await FetchTimes(filteredCityData.lat, filteredCityData.lng)
@@ -159,7 +142,6 @@ export default function App() {
 							<CityTimes
 								city={city}
 								timeZoneMode={timeZoneMode}
-								cityName={cityName.current}
 								refreshing={refreshing}
 								setRefreshing={setRefreshing}
 								hour12={hour12}

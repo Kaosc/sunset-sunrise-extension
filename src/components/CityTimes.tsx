@@ -1,20 +1,17 @@
 import { useMemo, useState } from "react"
 import moment from "moment-timezone"
-import cityTimezones from "city-timezones"
 
 import { IoMdRefresh } from "react-icons/io"
 import { FiSunrise, FiSunset } from "react-icons/fi"
 
 export default function CityTimes({
 	city,
-	cityName,
 	timeZoneMode,
 	refreshing,
 	setRefreshing,
 	hour12,
 }: {
 	city: City | undefined
-	cityName: string
 	timeZoneMode: string
 	refreshing: boolean
 	setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
@@ -39,21 +36,8 @@ export default function CityTimes({
 		let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 		// If the time zone mode is 'actual', try to find the time zone by city name
-		if (timeZoneMode === "actual" && cityName) {
-			let tz = []
-
-			// Try to find the time zone by city name
-			tz = cityTimezones.lookupViaCity(cityName)
-
-			/* 
-				If the city name is not found, try to find the time zone by state 
-				and get the first relevant result
-			*/
-			if (tz?.length === 0) {
-				tz = cityTimezones.findFromCityStateProvince(cityName)
-			}
-
-			timeZone = tz[0]?.timezone || timeZone
+		if (timeZoneMode === "actual" && city?.data?.city) {
+			timeZone = city?.data.timezone || timeZone
 		}
 
 		// Convert to the specified time zone
@@ -61,7 +45,7 @@ export default function CityTimes({
 			sunrise: sunriseUtc.tz(timeZone).format(timeFormat), // 12:00
 			sunset: sunsetUtc.tz(timeZone).format(timeFormat), // 23:00
 		}
-	}, [city, cityName, timeZoneMode, hour12])
+	}, [city, timeZoneMode, hour12])
 
 	return (
 		<div className="items-center justify-center flex flex-col text-center mb-4 transition-all ease-in-out">
@@ -81,18 +65,17 @@ export default function CityTimes({
 						onMouseLeave={() => setVisible(false)}
 					>
 						<h3
-							className={`p-1 text-4xl font-bold text-transparent bg-clip-text bg-slate-200 transition-all ease-in-out ${
+							className={`p-1 text-4xl font-bold text-white transition-all ease-in-out ${
 								visible
 									? "animate-in slide-in-from-bottom-0 duration-500"
 									: "-mb-8 animate-out slide-out-to-bottom-0 duration-500"
 							} `}
 						>
-							{cityName}
+							{city?.data.city}
+							<h4 className="text-[17px] -mt-1 text-[#949494]">{city?.data.country}</h4>
 						</h3>
 						<div
-							className={`${visible ? "visible" : "invisible"} ${
-								refreshing ? "animate-spin" : "animate-pulse"
-							}`}
+							className={`${visible ? "visible" : "invisible"} ${refreshing ? "animate-spin" : "animate-pulse"}`}
 							title="Refresh"
 						>
 							<IoMdRefresh
